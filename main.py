@@ -12,7 +12,9 @@ from langchain.chat_models import ChatOpenAI
 import streamlit as st
 import tempfile
 import os
+from streamlit_extras.buy_me_a_coffee import button 
 
+button(username="luvbb", floating=True, width=221)
 # 제목 
 st.title("Nepes ChatPDF")
 st.write("----")
