@@ -17,6 +17,9 @@ import os
 st.title("Nepes ChatPDF")
 st.write("----")
 
+# OPENAI key 입력받기
+openai_key = st.text_input('OPEN_AI_API_KEY', type = "password")
+
 #파일 업로드 
 uploaded_file = st.file_uploader("Choose a file")
 st.write("----")
@@ -51,7 +54,7 @@ if uploaded_file is not None:
     texts = text_splitter.split_documents(pages)
 
     #Enbedding
-    embeddings_model = OpenAIEmbeddings()
+    embeddings_model = OpenAIEmbeddings(openai_api_key=openai_key)
 
     # load it into Chroma
     db = Chroma.from_documents(texts, embeddings_model)
@@ -64,11 +67,11 @@ if uploaded_file is not None:
     if st.button('질문하기'):
         
 
-        llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
+        llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0, openai_api_key=openai_key)
         qa_chain = RetrievalQA.from_chain_type(llm, chain_type="stuff", retriever=db.as_retriever())
 
         result = qa_chain({"query":question})
-        st.write(result)
+        st.write(result["result"])
 
 # docs = retriever_from_llm.get_relevant_documents(query=question)
 # print(len(docs))
